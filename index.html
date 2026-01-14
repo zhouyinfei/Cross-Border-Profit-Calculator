@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Stop losing money on bad pricing</title>
+  <p style="margin:0;font-size:12px;color:#6b7280;">
+      Find the safest platform to sell your product
+    </p>
+  <link rel="stylesheet" href="css/app.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+
+<header>
+  <h1>
+    Cross-Border Profit Calculator
+    <span class="badge">PRO</span>
+  </h1>
+  <button onclick="openUpgrade()">Upgrade</button>
+</header>
+
+<main>
+    <div class="card" style="background:#eff6ff;border:1px solid #bfdbfe;">
+      <h2 style="font-size:18px;">
+        Compare Amazon, Shopify & Etsy — before you lose money
+      </h2>
+      <p style="color:#1e40af;font-size:14px;">
+        Enter your cost and target margin. We show you:
+      </p>
+      <ul style="color:#1e40af;font-size:14px;line-height:1.6;">
+        <li>✔ Real profit after platform fees</li>
+        <li>✔ Break-even price for each platform</li>
+        <li>✔ Which platform is the lowest risk</li>
+        <li>✔ Which platform makes the most money</li>
+      </ul>
+    </div>
+
+
+  <!-- Platform Selector (Pro) -->
+  <div class="card pro-lock">
+    <h2>Platform</h2>
+
+    <div class="pro-content">
+      <select id="platformSelect" onchange="onPlatformChange()">
+        <option>Amazon FBA US</option>
+        <option>Amazon FBM</option>
+        <option>Shopify (Stripe)</option>
+        <option>Etsy</option>
+      </select>
+    </div>
+
+    <div class="pro-overlay">
+      <p>Upgrade to unlock multi-platform pricing</p>
+      <button onclick="openUpgrade()">Upgrade</button>
+    </div>
+  </div>
+
+  <!-- Cost & Pricing (Free) -->
+  <div class="card">
+    <h2>Cost & Pricing</h2>
+
+    <div class="grid">
+      <div>
+        <label>Product Cost (USD)</label>
+        <input type="number" id="productCost" value="10">
+      </div>
+      <div>
+        <label>Shipping Cost (USD)</label>
+        <input type="number" id="shippingCost" value="3">
+      </div>
+	  <div>
+		  <label>Platform Fee (%)</label>
+		  <input type="number" id="platformFeePercent" value="15">
+		</div>
+      <div>
+        <label>Other Cost</label>
+        <input type="number" id="otherCost" value="0">
+      </div>
+    </div>
+
+    <label>Target Profit Margin (%)</label>
+    <input type="number" id="margin" value="30">
+  </div>
+
+  <!-- AI Insights (Pro) -->
+  <div class="card pro-lock">
+    <h2>AI Risk Analysis</h2>
+
+    <div class="pro-content">
+		<ul id="aiInsights"></ul>
+    </div>
+
+    <div class="pro-overlay">
+      <p>Upgrade to unlock AI risk analysis</p>
+      <button onclick="openUpgrade()">Upgrade</button>
+    </div>
+  </div>
+
+  <!-- Pricing Results (Free) -->
+  <div class="card">
+    <h2>Pricing Results</h2>
+    <div class="price" id="price">$29.90</div>
+    <div class="metrics">
+      <div>Profit / Unit: <strong>$9.90</strong></div>
+      <div>Margin: <strong>30%</strong></div>
+      <div>Break-even: <strong>$20.00</strong></div>
+    </div>
+  </div>
+
+  <!-- Scenario Comparison (Pro) -->
+  <div class="card scenario-box wide-scenarios">
+    <h2>Scenario Comparison</h2>
+
+    <div class="pro-content">
+		<table>
+			<thead>
+			  <tr>
+				<th>Platform</th>
+				<th>Price</th>
+				<th>Profit</th>
+				<th>Margin</th>
+				<th>Break-even</th>
+			  </tr>
+			</thead>
+		  <tbody id="scenarioTableBody"></tbody>
+		</table>
+    </div>
+
+    <div class="pro-overlay">
+      <p>Upgrade to compare pricing scenarios</p>
+      <button onclick="openUpgrade()">Upgrade</button>
+    </div>
+  </div>
+
+  <!-- Save / Export (Pro) -->
+  <div class="card pro-lock">
+    <div class="actions pro-content">
+      <button onclick="saveScenario()">Save Scenario</button>
+      <button onclick="exportPDF()">Export PDF</button>
+      <button onclick="exportCSV()" id="exportCsvBtn">Export CSV</button>
+    </div>
+
+    <div class="pro-overlay">
+      <p>Upgrade to save and export</p>
+      <button onclick="openUpgrade()">Upgrade</button>
+    </div>
+  </div>
+  
+  <!-- Saved Scenarios (Pro) -->
+    <div class="card pro-lock">
+      <h2>Saved Scenarios</h2>
+    
+      <div class="pro-content">
+        <div id="savedList"></div>
+      </div>
+      
+      <button onclick="clearScenarios()" style="margin-top:12px;color:#dc2626;">
+          Clear All Saved Scenarios
+        </button>
+    
+      <div class="pro-overlay">
+        <p>Upgrade to view saved scenarios</p>
+        <button onclick="openUpgrade()">Upgrade</button>
+      </div>
+    </div>
+    
+    <div id="upgradeModal" style="
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.4);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:1000;
+    ">
+      <div style="
+        background:#fff;
+        width:90%;
+        max-width:480px;
+        border-radius:12px;
+        padding:24px;
+        box-shadow:0 10px 40px rgba(0,0,0,0.15);
+      ">
+        <h2 style="margin-top:0;">
+          Stop losing money on bad pricing
+        </h2>
+    
+        <p style="color:#374151;">
+          Most sellers only look at profit.  
+          <strong>Professionals look at break-even and platform risk.</strong>
+        </p>
+    
+        <ul style="color:#1f2937;line-height:1.7;">
+          <li>✔ Compare Amazon, Shopify & Etsy</li>
+          <li>✔ Find the lowest-risk platform</li>
+          <li>✔ AI tells you where you will lose money</li>
+          <li>✔ Export pricing reports for your boss or client</li>
+          <li>✔ Save pricing scenarios for every product</li>
+        </ul>
+    
+        <div style="
+          background:#eff6ff;
+          border:1px solid #bfdbfe;
+          padding:12px;
+          border-radius:8px;
+          margin:16px 0;
+          color:#1e40af;
+          font-size:14px;
+        ">
+          One wrong price on Amazon can cost you more than this in a single day.
+        </div>
+    
+        <div style="display:flex;gap:12px;">
+          <button onclick="activatePro()" style="
+            flex:1;
+            background:#2563eb;
+            color:#fff;
+            border:none;
+            padding:12px;
+            border-radius:8px;
+            font-size:15px;
+            cursor:pointer;
+          ">
+            Unlock Pro — $19 Lifetime
+          </button>
+    
+          <button onclick="activatePro()" style="
+            background:#f3f4f6;
+            border:none;
+            padding:12px;
+            border-radius:8px;
+            cursor:pointer;
+          ">
+            Not now
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+</main>
+
+<script src="js/core.js"></script>
+
+
+</body>
+</html>
